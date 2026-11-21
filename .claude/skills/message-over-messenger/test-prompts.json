@@ -1,0 +1,86 @@
+{
+  "skill": "message-over-messenger",
+  "version": "0.1.0",
+  "source_book": "《疯传——让你的产品、思想、行为像病毒一样入侵》 乔纳·伯杰",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们营销预算有限，在纠结这笔钱该花在请KOL上还是花在内容创作上，预算花在找KOL还是做内容上效果更好？",
+      "expected_behavior": "应激活 message-over-messenger, 并建议将更多预算投入内容设计（至少40%），因为符合STEPPS属性的内容即使由普通人分享也能大规模传播，而KOL推送不具备传播属性的内容效果很差",
+      "notes": "正面场景：直接匹配语言信号'预算花在找KOL还是做内容上'，核心的预算分配决策"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们找了一个百万粉丝的头部KOL发了推广视频，但几乎没有用户自发转发，为什么KOL发了但没人转发？",
+      "expected_behavior": "应激活 message-over-messenger, 并诊断推广内容是否缺乏STEPPS属性（社交货币、诱因、情绪、公共性、实用价值、故事），即使KOL粉丝量大，不具备传播属性的内容也不会被二次分享",
+      "notes": "正面场景：直接匹配语言信号'为什么KOL发了但没人转发'，反思KOL策略的效果"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "老板觉得只要找到关键人物就能引爆我们的新品传播，要花大价钱请网红，引爆传播到底靠渠道还是靠内容？",
+      "expected_behavior": "应激活 message-over-messenger, 并挑战'找到关键人物就能引爆'的假设，引用STEPPS框架说明传播力来自信息本身的六个属性，建议先优化内容再考虑渠道",
+      "notes": "正面场景：直接匹配语言信号'是不是找到关键人物就能引爆'和'引爆传播到底靠渠道还是靠内容'"
+    },
+    {
+      "id": "should-trigger-04",
+      "type": "should_trigger",
+      "prompt": "我们在讨论明年KOL预算占比应该多少，市场部说应该占到60%，但我觉得内容本身更重要，你怎么看？",
+      "expected_behavior": "应激活 message-over-messenger, 并支持用户对内容重要性的判断，建议审计当前内容的STEPPS属性，将内容设计占比提升到至少40%，确保每条KOL推送的内容都经过STEPPS优化",
+      "notes": "正面场景：匹配语言信号'KOL预算占比应该多少'和A2触发场景"
+    },
+    {
+      "id": "should-trigger-05",
+      "type": "should_trigger",
+      "prompt": "我们做了一个很用心的内容，没有找任何KOL推广，结果自己火了。现在老板想下次复制这个成功，问我们应该把预算投在哪里？",
+      "expected_behavior": "应激活 message-over-messenger, 并帮助用户分析这次成功内容的STEPPS属性，建议继续投入内容设计，因为已经证明了信息本身的传播力，无需依赖KOL",
+      "notes": "正面场景：用户已经用实践验证了'信息比传播者重要'的结论，需要系统化方法来复制成功"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们需要选一个KOL来推广新产品，目前在张三和李四之间纠结，张三粉丝量大但互动率低，李四粉丝量少但粉丝粘性高，选哪个更合适？",
+      "expected_behavior": "不应激活本 skill, 因为这是KOL筛选的纯执行决策——已经确定要用KOL，只是在选'哪个KOL'，而非讨论'该不该用KOL'或'预算在渠道和内容之间怎么分'",
+      "notes": "诱饵: KOL选择执行决策——涉及KOL但本质是渠道执行层面的二选一，不涉及'信息vs传播者'的战略讨论"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我们B2B公司要签约一个行业专家作为长期品牌代言人，合作期3年，主要目的是提升品牌在行业内的权威形象，代言费预算怎么定？",
+      "expected_behavior": "不应激活本 skill, 因为这是B2B大客户销售/品牌长期形象建设场景，SKILL.md明确'品牌代言人长期签约的目的是品牌形象联想而非单次传播引爆'和'B2B大客户销售关系驱动'",
+      "notes": "诱饵: 品牌代言人签约——涉及'传播者'和'预算'但本质是品牌形象建设，不是讨论传播力来源"
+    },
+    {
+      "id": "should-not-trigger-03",
+      "type": "should_not_trigger",
+      "prompt": "我们是一家B2B企业软件公司，主要通过行业关系网络获客，销售团队需要更多的大客户线索，怎么优化我们的客户关系管理？",
+      "expected_behavior": "不应激活本 skill, 因为这是B2B大客户销售场景，SKILL.md明确'企业采购决策高度依赖关系和信任，信息属性的作用被关系网络稀释'",
+      "notes": "诱饵: B2B关系驱动获客——涉及获客和传播，但在B2B场景下'找对人'确实比信息设计更重要"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们想在抖音上做推广，抖音的算法推荐本身就决定了内容的初始曝光量，在这种情况下讨论'内容还是KOL更重要'还有意义吗？",
+      "expected_behavior": "边界判断：仍可激活但需补充说明。算法推荐确实改变了传播链的起点（SKILL.md时代局限提到'算法本身成了关键人物'），但STEPPS属性仍然决定了用户是否二次分享。内容设计依然重要，但算法适配成为新维度",
+      "notes": "边界: 算法推荐环境——信息设计仍然重要，但传播模型中'传播者'的角色被算法替代，需要补充讨论"
+    },
+    {
+      "id": "edge-02",
+      "type": "edge_case",
+      "prompt": "我们请的KOL不仅是转发我们的内容，还会参与内容共创，他们帮我们写脚本和拍摄，这种情况下KOL算传播者还是内容创作者？",
+      "expected_behavior": "边界判断：可激活但需修正框架。SKILL.md时代局限提到'今天的KOL具备内容创作能力，与信息设计的边界已模糊'。当KOL参与内容创作时，他们既是传播者也是内容设计者，预算在KOL和内容之间的二分法需要调整为'共创质量'评估",
+      "notes": "边界: KOL角色模糊化——当KOL同时是内容创作者时，'传播者vs信息设计'的二元对立不再准确"
+    },
+    {
+      "id": "edge-03",
+      "type": "edge_case",
+      "prompt": "我们的内容团队设计了一条符合多个STEPPS维度的好内容，但零初始曝光量，没有KOL推送的话根本没人看到，这种情况下不找KOL怎么破？",
+      "expected_behavior": "边界判断：应激活但需承认用户的现实困境。信息设计是传播力的上限，但初始曝光是传播的起点。建议不花大价钱请头部KOL，而是用小预算做初始种子传播（微型KOL、社群运营），让好内容自然扩散",
+      "notes": "边界: 冷启动困境——信息设计再好也需要初始曝光，本skill可能低估了传播者'启动'传播链的价值"
+    }
+  ],
+  "minimum_pass_rate": 0.8
+}

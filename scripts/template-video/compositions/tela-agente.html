@@ -1,0 +1,110 @@
+<!doctype html>
+<html
+  data-composition-variables='[
+    {"id":"gravacao","type":"string","label":"Gravação de tela","default":"assets/gravacao-exemplo.mp4"},
+    {"id":"ia","type":"string","label":"IA testada","default":"GPT 6 Astra"},
+    {"id":"numero","type":"number","label":"Número do nível","default":1,"min":1,"max":9,"step":1},
+    {"id":"duracao","type":"number","label":"Duração do trecho (s)","default":10,"min":1,"step":0.1},
+    {"id":"crono_de","type":"number","label":"Cronômetro início (s)","default":0,"min":0,"step":1},
+    {"id":"crono_ate","type":"number","label":"Cronômetro fim (s)","default":360,"min":0,"step":1},
+    {"id":"legenda","type":"string","label":"Legenda (JSON de palavras)","default":"[]"},
+    {"id":"zooms","type":"string","label":"Zooms (JSON)","default":"[]"}
+  ]'
+>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; background: #0A0F0B; overflow: hidden; font-family: "JetBrains Mono", monospace; color: #D8F3DC; }
+        #ta-term { position: absolute; left: 56px; top: 36px; right: 56px; bottom: 170px; border: 4px solid #1F3A24; background: #111A13; overflow: hidden; }
+        #ta-bar { position: absolute; left: 0; right: 0; top: 0; height: 60px; border-bottom: 3px solid #1F3A24; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font-size: 26px; color: #8FA394; background: #111A13; z-index: 2; }
+        #ta-live { display: flex; align-items: center; gap: 14px; }
+        #ta-dot { width: 18px; height: 18px; border-radius: 50%; background: #39FF14; }
+        #ta-crono { color: #39FF14; font-weight: 700; }
+        #ta-view { position: absolute; left: 0; right: 0; top: 60px; bottom: 0; overflow: hidden; }
+        #ta-zoom { position: absolute; inset: 0; }
+        #ta-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        #ta-cap { position: absolute; left: 80px; right: 80px; bottom: 44px; height: 90px; }
+        .ta-group { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; gap: 0 22px; flex-wrap: nowrap; font-size: 58px; font-weight: 700; color: #D8F3DC; opacity: 0; white-space: nowrap; }
+        .ta-w { display: block; }
+      </style>
+
+      <div id="root" data-composition-id="tela-agente" data-width="1920" data-height="1080">
+        <div id="ta-term">
+          <div id="ta-bar">
+            <div id="ta-live"><span id="ta-dot"></span><span id="ta-label"></span></div>
+            <div id="ta-crono">00:00</div>
+          </div>
+          <div id="ta-view">
+            <div id="ta-zoom" data-layout-allow-overflow>
+              <video id="ta-video" class="clip" data-start="0" data-track-index="0" data-var-src="gravacao" src="assets/gravacao-exemplo.mp4" muted playsinline></video>
+            </div>
+          </div>
+        </div>
+        <div id="ta-cap"></div>
+      </div>
+
+      <script>
+        (function () {
+          const v = window.__hyperframes.getVariables();
+          document.getElementById("ta-label").textContent = v.ia + " · nível " + Math.round(v.numero);
+          const parse = (s) => { try { return JSON.parse(s); } catch (e) { return []; } };
+          const palavras = parse(v.legenda);
+          const zooms = parse(v.zooms);
+          const tl = gsap.timeline({ paused: true });
+
+          // cronômetro do agente: corre do início ao fim do trecho
+          const crono = document.getElementById("ta-crono");
+          const relogio = { s: v.crono_de };
+          const fmt = (s) => { s = Math.max(0, Math.floor(s)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
+          const renderCrono = () => { crono.textContent = fmt(relogio.s); };
+          renderCrono();
+          tl.to(relogio, { s: v.crono_ate, duration: v.duracao, ease: "none", onUpdate: renderCrono }, 0);
+          tl.fromTo("#ta-dot", { opacity: 1 }, { opacity: 0.25, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: Math.max(1, Math.floor(v.duracao / 0.6)) }, 0);
+
+          // zoom suave em regiões (x, y = centro em fração da tela; escala)
+          zooms.forEach((z) => {
+            const ox = (z.x * 100).toFixed(1) + "% " + (z.y * 100).toFixed(1) + "%";
+            const ida = Math.min(0.8, z.duracao / 3);
+            tl.set("#ta-zoom", { transformOrigin: ox }, z.em);
+            tl.fromTo("#ta-zoom", { scale: 1 }, { scale: z.escala, duration: ida, ease: "power3.inOut" }, z.em);
+            tl.to("#ta-zoom", { scale: 1, duration: ida, ease: "power3.inOut" }, z.em + z.duracao - ida);
+          });
+
+          // legenda: blocos de até 4 palavras, palavra falada em verde
+          const cap = document.getElementById("ta-cap");
+          const grupos = [];
+          let atual = [];
+          palavras.forEach((w, i) => {
+            atual.push(w);
+            const fimFrase = /[.?!]$/.test(w.text);
+            const virgula = /[,:;]$/.test(w.text) && atual.length >= 3;
+            const pausa = palavras[i + 1] && palavras[i + 1].start - w.end > 0.35 && atual.length >= 2;
+            if (atual.length >= 5 || fimFrase || virgula || pausa || i === palavras.length - 1) { grupos.push(atual); atual = []; }
+          });
+          grupos.forEach((g, gi) => {
+            const el = document.createElement("div");
+            el.className = "ta-group"; el.id = "ta-g-" + gi;
+            g.forEach((w, wi) => {
+              const s = document.createElement("span");
+              s.className = "ta-w"; s.id = "ta-w-" + gi + "-" + wi; s.textContent = w.text;
+              el.appendChild(s);
+            });
+            cap.appendChild(el);
+            const ini = g[0].start;
+            const prox = grupos[gi + 1] ? grupos[gi + 1][0].start : g[g.length - 1].end + 0.6;
+            const fim = Math.min(prox, g[g.length - 1].end + 0.6);
+            tl.fromTo(el, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.12, ease: "power2.out" }, ini);
+            tl.set(el, { opacity: 0 }, fim);
+            g.forEach((w, wi) => {
+              tl.set("#ta-w-" + gi + "-" + wi, { color: "#39FF14" }, w.start);
+              tl.set("#ta-w-" + gi + "-" + wi, { color: "#D8F3DC" }, w.end);
+            });
+          });
+
+          window.__timelines["tela-agente"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html
+  data-composition-variables='[
+    {"id":"niveis","type":"string","label":"Níveis (JSON)","default":"[{\"numero\":1,\"desafio\":\"Pokébola\",\"resultado\":\"ok\",\"tempo\":\"6 min\"},{\"numero\":2,\"desafio\":\"Dragão\",\"resultado\":\"erro\",\"tempo\":\"22 min\"},{\"numero\":3,\"desafio\":\"Vila jogável\",\"resultado\":\"ok\",\"tempo\":\"29 min\"}]"},
+    {"id":"pergunta","type":"string","label":"Pergunta final","default":"QUAL IA EU TESTO AGORA?"}
+  ]'
+>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; background: #0A0F0B; overflow: hidden; font-family: "JetBrains Mono", monospace; color: #D8F3DC; }
+        #pl-term { position: absolute; left: 80px; top: 80px; right: 80px; bottom: 80px; border: 4px solid #1F3A24; background: rgba(17,26,19,0.92); }
+        #pl-bar { height: 64px; border-bottom: 3px solid #1F3A24; display: flex; align-items: center; gap: 14px; padding: 0 26px; font-size: 26px; color: #8FA394; }
+        .pl-dot { width: 18px; height: 18px; border-radius: 50%; background: #1F3A24; }
+        #pl-dot1 { background: #39FF14; }
+        #pl-body { position: absolute; left: 70px; right: 70px; top: 130px; }
+        #pl-cmd { font-size: 40px; color: #8FA394; }
+        #pl-rows { margin-top: 50px; display: flex; flex-direction: column; gap: 22px; }
+        .pl-row { display: flex; align-items: baseline; gap: 34px; font-size: 64px; }
+        .pl-mark { width: 64px; font-weight: 700; }
+        .pl-ok { color: #39FF14; }
+        .pl-erro { color: #FF3B3B; }
+        .pl-name { color: #8FA394; }
+        .pl-time { color: #8FA394; font-size: 40px; }
+        #pl-q { margin-top: 70px; font-family: "Archivo Black", sans-serif; font-size: 96px; line-height: 1; }
+        #pl-cursor { display: inline-block; width: 0.5em; height: 0.82em; margin-left: 14px; background: #39FF14; vertical-align: -0.06em; }
+        #pl-scan { position: absolute; left: 0; right: 0; top: 0; height: 6px; background: #39FF14; box-shadow: 0 0 24px rgba(57,255,20,0.6); }
+      </style>
+
+      <div id="root" data-composition-id="placar" data-width="1920" data-height="1080">
+        <div id="pl-term">
+          <div id="pl-bar"><span class="pl-dot" id="pl-dot1"></span><span class="pl-dot"></span><span class="pl-dot"></span><span>agente@canal: ~/resultado</span></div>
+          <div id="pl-body">
+            <div id="pl-cmd">&gt; placar --final</div>
+            <div id="pl-rows"></div>
+            <div id="pl-q"><span id="pl-q-txt"></span><span id="pl-cursor"></span></div>
+          </div>
+        </div>
+        <div id="pl-scan" data-layout-allow-overflow></div>
+      </div>
+
+      <script>
+        (function () {
+          const v = window.__hyperframes.getVariables();
+          let niveis = [];
+          try { niveis = JSON.parse(v.niveis); } catch (e) { niveis = []; }
+          const rows = document.getElementById("pl-rows");
+          niveis.forEach((n, i) => {
+            const r = document.createElement("div");
+            r.className = "pl-row"; r.id = "pl-row-" + i;
+            const ok = n.resultado === "ok";
+            r.innerHTML = '<span class="pl-mark ' + (ok ? "pl-ok" : "pl-erro") + '" id="pl-mark-' + i + '">' + (ok ? "✓" : "✗") + "</span>";
+            const lbl = document.createElement("span"); lbl.textContent = "NÍVEL " + n.numero; r.appendChild(lbl);
+            const nm = document.createElement("span"); nm.className = "pl-name"; nm.textContent = n.desafio; r.appendChild(nm);
+            const tm = document.createElement("span"); tm.className = "pl-time"; tm.textContent = "· " + n.tempo; r.appendChild(tm);
+            rows.appendChild(r);
+          });
+          const q = document.getElementById("pl-q-txt");
+          const qText = v.pergunta;
+          const typing = { c: 0 };
+          const renderQ = () => { q.textContent = qText.slice(0, Math.round(typing.c)); };
+          renderQ();
+
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#pl-scan", { y: -10 }, { y: 1090, duration: 0.45, ease: "power2.in" }, 0);
+          tl.fromTo("#pl-term", { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.45, ease: "power2.in" }, 0);
+          niveis.forEach((n, i) => {
+            const t = 0.6 + i * 0.45;
+            tl.fromTo("#pl-row-" + i, { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "expo.out" }, t);
+            tl.fromTo("#pl-mark-" + i, { scale: 1.8 }, { scale: 1, duration: 0.3, ease: "back.out(3)" }, t + 0.15);
+          });
+          const tq = 0.8 + niveis.length * 0.45;
+          tl.to(typing, { c: qText.length, duration: 0.9, ease: "none", onUpdate: renderQ }, tq);
+          tl.fromTo("#pl-cursor", { opacity: 1 }, { opacity: 0, duration: 0.4, ease: "steps(1)", repeat: 9, yoyo: true }, tq + 0.9);
+          window.__timelines["placar"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

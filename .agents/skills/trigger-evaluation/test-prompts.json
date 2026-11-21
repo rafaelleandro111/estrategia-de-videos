@@ -1,0 +1,73 @@
+{
+  "skill": "trigger-evaluation",
+  "version": "0.1.0",
+  "source_book": "《疯传——让你的产品、思想、行为像病毒一样入侵》 乔纳·伯杰",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们团队有两个候选场景可以绑定, 一个是'喝咖啡的时候', 一个是'看球赛的时候'。哪个更适合做我们零食品牌的诱因？",
+      "expected_behavior": "应激活 trigger-evaluation, 并用三维矩阵（频率、强度、情境）对两个候选诱因逐一打分对比, 推荐总分更高的选项",
+      "notes": "正面场景: '几个候选诱因选哪个', SKILL.md触发场景1和语言信号5完全匹配。典型的多诱因对比评估需求"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们上个月做了个广告, 把产品和'周末运动'绑定在一起了, 但效果不如预期。你帮我看看这个场景绑定有没有问题？",
+      "expected_behavior": "应激活 trigger-evaluation, 并用三维矩阵评估'周末运动'作为诱因的有效性——频率（每周一次, 但仅限运动人群）、强度（运动指向很多事物）、情境（运动后能否立即购买）, 找出具体哪个维度出了问题",
+      "notes": "正面场景: '为什么我选的诱因效果不好', SKILL.md触发场景3和语言信号4匹配。已有方案需要验证有效性"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "我在做A/B测试, A版本把产品和'每天通勤地铁'关联, B版本关联'周末聚餐'。从理论上来说哪个诱因更强？帮我分析一下。",
+      "expected_behavior": "应激活 trigger-evaluation, 并用三维矩阵对两个版本进行理论评估, 给出频率/强度/情境的逐维分析, 为A/B测试选择提供决策依据",
+      "notes": "正面场景: 'A/B测试不同的诱因绑定', SKILL.md触发场景4完全匹配"
+    },
+    {
+      "id": "should-trigger-04",
+      "type": "should_trigger",
+      "prompt": "我想把'下雨天'作为我们热饮品牌的诱因, 你觉得这个刺激物专一吗？消费者看到下雨会第一个想到我们吗？",
+      "expected_behavior": "应激活 trigger-evaluation, 并重点评估强度维度（连接专一性）——'下雨天'让人联想到撑伞、宅家、伤感音乐等太多事物, 连接被稀释, 强度可能很低。同时评估频率和情境维度",
+      "notes": "正面场景: '这个场景绑定行不行', 涉及诱因强度评估, SKILL.md语言信号2匹配"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们在评估抖音和小红书两个广告投放渠道的ROI, 抖音CPA是35块, 小红书是52块。你觉得我们应该把预算集中在哪个平台？",
+      "expected_behavior": "不应激活本 skill, 因为用户在评估广告投放渠道ROI, 不是评估诱因质量。这是媒介购买和渠道优化问题, SKILL.md边界明确区分",
+      "notes": "诱饵: 广告渠道ROI评估。用户在做'评估'和'对比', 但评估对象是投放渠道的转化效率, 不是诱因的有效性。诱因评估关注的是环境刺激物的频率-强度-情境, 而非广告平台的ROI"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我们的品牌还没有和任何日常场景绑定过, 现在想找一些适合的场景。你帮我想想有哪些场景可以尝试？",
+      "expected_behavior": "不应激活本 skill, 因为用户还在'找诱因'阶段, 不是在评估已有诱因。SKILL.md边界明确排除'还没有找到候选诱因的阶段——此时应该用trigger-habitat的栖息地开发方法来发现诱因'",
+      "notes": "诱饵: 还在找诱因阶段。用户想要找场景, 这应该用 trigger-habitat。trigger-evaluation 是'验收阶段', 需要先有候选诱因才能评估"
+    },
+    {
+      "id": "should-not-trigger-03",
+      "type": "should_not_trigger",
+      "prompt": "我们这条广告片拍得很有趣, 点击率很高, 你觉得这个创意怎么样？能不能火？",
+      "expected_behavior": "不应激活本 skill, 因为用户在评估广告内容的趣味性和吸引力, 这不是诱因评估, 而是社交货币/内容创作层面的问题。SKILL.md边界排除'评估内容的趣味性和吸引力——这不是诱因评估, 而是社交货币评估'",
+      "notes": "诱饵: 评估内容趣味性。'能不能火'涉及传播潜力, 但用户关注的是创意/趣味性, 不是诱因维度。应引导至 stepps-diagnostic 或 social-currency"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们想把产品和'加班'这个场景绑定, 但不确定加班这个刺激物够不够专一。你觉得打工人看到加班会联想到什么？第一个想到的会是我们的产品吗？",
+      "expected_behavior": "边界判断: 应激活 trigger-evaluation, 因为用户已经有候选诱因并在评估其质量。重点分析强度维度——'加班'让人联想到疲惫、外卖、咖啡、摸鱼等大量事物, 连接专一性存疑。但加班频率高（每天/每周）, 频率维度可能得分较高",
+      "notes": "边界: 用户已经有了候选诱因（加班）, 且在问'够不够专一', 这明确进入了评估阶段。但用户的表达方式比较随意, 不是严格的'帮我评估', 而是带有疑问的探讨语气"
+    },
+    {
+      "id": "edge-02",
+      "type": "edge_case",
+      "prompt": "我们设计了一套栖息地策略, 绑定了三个场景: 早起、喝咖啡、运动后。你帮我全面检查一下这个方案有没有漏洞？",
+      "expected_behavior": "边界判断: 应同时涉及 trigger-habitat（栖息地策略的完整性检查）和 trigger-evaluation（三个诱因各自的二维评估）。建议先用 trigger-evaluation 对三个场景分别做三维评估, 再从栖息地整体视角检查覆盖面",
+      "notes": "边界: 用户已经有了栖息地策略（habitat的输出）, 并要求'检查漏洞'——这既可以理解为评估各个诱因的质量（evaluation的领域）, 也可以理解为栖息地完整性审查（habitat的领域）。两个skill都相关"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。"
+}

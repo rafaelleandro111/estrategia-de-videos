@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Storyboard — template do canal (v1)</title>
+<style>
+  :root {
+    --bg: #0A0F0B; --fg: #D8F3DC; --acc: #39FF14; --err: #FF3B3B; --ui: #5C6B60; --panel: #111A13;
+    --mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+    --impact: "Archivo Black", "Arial Black", Impact, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #050806; color: var(--fg); font-family: var(--mono); padding: 40px; }
+  header { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; margin-bottom: 32px; }
+  header h1 { font-family: var(--impact); font-size: 34px; color: var(--fg); }
+  header .v { color: var(--acc); font-size: 16px; border: 1px solid var(--acc); padding: 2px 8px; }
+  header p { color: var(--ui); font-size: 15px; flex-basis: 100%; }
+  .tag { color: var(--ui); font-size: 13px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  @media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
+  figure { display: flex; flex-direction: column; gap: 10px; }
+  .cell { aspect-ratio: 16 / 9; container-type: inline-size; background: var(--bg); position: relative; overflow: hidden; border: 1px solid #1d2a20; }
+  .label { display: flex; justify-content: space-between; font-size: 12px; color: var(--ui); }
+  .label b { color: var(--fg); }
+  .note { font-size: 13px; line-height: 1.5; color: #a9c2ae; }
+  .note strong { color: var(--fg); }
+  .chip { align-self: flex-start; font-size: 11px; color: var(--acc); border: 1px solid #2a4a2e; padding: 2px 8px; }
+
+  /* janela de terminal (a espinha) */
+  .term { position: absolute; inset: 4cqw 4cqw 4cqw 4cqw; border: 0.3cqw solid #1f3a24; background: var(--panel); }
+  .bar { height: 3.6cqw; border-bottom: 0.25cqw solid #1f3a24; display: flex; align-items: center; gap: 0.8cqw; padding: 0 1.4cqw; font-size: 1.5cqw; color: var(--ui); }
+  .dot { width: 1cqw; height: 1cqw; border-radius: 50%; background: #1f3a24; }
+  .dot.on { background: var(--acc); }
+  .body { padding: 2.4cqw 3cqw; }
+  .cmd { font-size: 2.2cqw; color: var(--ui); }
+  .cmd em { color: var(--acc); font-style: normal; }
+  .big { font-family: var(--impact); color: var(--fg); line-height: 1.02; }
+  .cursor { display: inline-block; width: 0.55em; height: 0.9em; background: var(--acc); vertical-align: -0.08em; }
+  .ghost { position: absolute; font-family: var(--impact); color: var(--acc); opacity: 0.07; white-space: nowrap; }
+  .scan { position: absolute; left: 0; right: 0; height: 0.3cqw; background: var(--acc); opacity: 0.5; }
+  .media { background: repeating-linear-gradient(45deg, #17231a 0 1.2cqw, #131d16 1.2cqw 2.4cqw); border: 0.25cqw dashed #2d4a32; display: flex; align-items: center; justify-content: center; color: var(--ui); font-size: 1.6cqw; text-align: center; }
+  .cap { position: absolute; left: 0; right: 0; text-align: center; font-size: 2.6cqw; font-weight: 700; color: var(--fg); }
+  .cap span { color: var(--acc); }
+  .tokens { font-size: 13px; line-height: 1.7; padding: 18px; background: var(--bg); border: 1px solid #1d2a20; }
+  .sw { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px; border: 1px solid #333; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Template do canal — IA criando coisas</h1><span class="v">v1</span>
+  <span class="tag">1920×1080 + 1080×1920 · 6 peças · narração pm_santa</span>
+  <p>A espinha: uma janela de terminal fixa. Tudo acontece dentro dela. Esboços parados: a animação vem depois que o layout for aprovado. Hachurado = gravação de tela real.</p>
+</header>
+
+<div class="grid">
+
+  <!-- 01 ABERTURA -->
+  <figure>
+    <div class="cell" id="frame-01">
+      <div class="ghost" style="font-size:22cqw; right:-4cqw; bottom:-5cqw;">IA</div>
+      <div class="term">
+        <div class="bar"><span class="dot on"></span><span class="dot"></span><span class="dot"></span>&nbsp; agente@canal: ~</div>
+        <div class="body">
+          <div class="cmd">&gt; agente --ia <em>"GPT 6 Astra"</em> --desafio</div>
+          <div class="big" style="font-size:8.4cqw; margin-top:3.2cqw;">ELE CONSEGUE<br>CRIAR UM <span style="color:var(--acc)">JOGO 3D?</span><span class="cursor"></span></div>
+          <div class="cmd" style="margin-top:3cqw; font-size:1.8cqw;">// 3 níveis · do fácil ao impossível</div>
+        </div>
+      </div>
+    </div>
+    <div class="label"><b>01 · ABERTURA</b><span>abertura · 0–5 s</span></div>
+    <div class="note"><strong>Primeiro mexe o comando,</strong> digitado letra a letra; o título bate em seguida em blocos de palavra. Cursor verde fica piscando. Sai com uma linha de varredura de cima pra baixo.</div>
+    <span class="chip">corte → varredura</span>
+  </figure>
+
+  <!-- 02 CARTELA DE NÍVEL -->
+  <figure>
+    <div class="cell" id="frame-02">
+      <div class="ghost" style="font-size:40cqw; left:44cqw; top:-8cqw;">2</div>
+      <div class="term">
+        <div class="bar"><span class="dot on"></span><span class="dot"></span><span class="dot"></span>&nbsp; agente@canal: ~/nivel-2</div>
+        <div class="body" style="padding-top:5cqw;">
+          <div class="cmd">&gt; carregar desafio</div>
+          <div class="big" style="font-size:10cqw; color:var(--acc); margin-top:1.5cqw;">NÍVEL 2<span class="cursor" style="background:var(--fg)"></span></div>
+          <div class="big" style="font-size:5cqw; margin-top:0.6cqw;">O DRAGÃO</div>
+          <div style="margin-top:3cqw; font-size:1.9cqw; color:var(--ui);">dificuldade <span style="color:var(--acc); letter-spacing:0.3cqw;">■■■</span><span style="letter-spacing:0.3cqw;">□□</span> &nbsp;3/5</div>
+        </div>
+      </div>
+    </div>
+    <div class="label"><b>02 · CARTELA DE NÍVEL</b><span>cartela-nivel · 3 s</span></div>
+    <div class="note"><strong>Primeiro o número</strong> pula em verde, depois o nome do desafio, e por último a barra de dificuldade enche quadrado por quadrado. Variáveis: número, desafio, dificuldade.</div>
+    <span class="chip">varredura → corte</span>
+  </figure>
+
+  <!-- 03 AGENTE TRABALHANDO -->
+  <figure>
+    <div class="cell" id="frame-03">
+      <div class="term" style="inset:2.4cqw 3cqw 9cqw 3cqw;">
+        <div class="bar" style="justify-content:space-between;">
+          <span><span class="dot on" style="display:inline-block"></span>&nbsp; GPT 6 Astra · nível 2</span>
+          <span style="color:var(--acc)">⏱ 06:12</span>
+        </div>
+        <div class="media" style="position:absolute; inset:3.6cqw 0 0 0; border:none;">GRAVAÇÃO DE TELA REAL<br><span style="font-size:1.3cqw">(Blender, navegador, Codex…)</span></div>
+        <div style="position:absolute; right:6cqw; top:12cqw; width:30cqw; height:17cqw; border:0.35cqw solid var(--acc);"></div>
+        <div style="position:absolute; right:6cqw; top:9.6cqw; font-size:1.4cqw; color:var(--acc);">zoom 1.8×</div>
+      </div>
+      <div class="cap" style="bottom:3cqw;">ele criou a pokébola em <span>seis minutos</span></div>
+    </div>
+    <div class="label"><b>03 · AGENTE TRABALHANDO</b><span>tela-agente · variável</span></div>
+    <div class="note"><strong>Primeiro mexe a legenda,</strong> palavra a palavra, com a palavra falada em verde; o cronômetro corre sempre. Nos trechos marcados, a gravação dá zoom suave na área do retângulo verde (que não aparece no vídeo).</div>
+    <span class="chip">corte → corte</span>
+  </figure>
+
+  <!-- 04 VEREDITO -->
+  <figure>
+    <div class="cell" id="frame-04">
+      <div class="term">
+        <div class="bar"><span class="dot on"></span><span class="dot"></span><span class="dot"></span>&nbsp; agente@canal: ~/nivel-2</div>
+        <div class="body">
+          <div class="cmd">&gt; testar resultado</div>
+          <div style="margin-top:4cqw; display:inline-block; border:0.6cqw solid var(--err); padding:1.2cqw 2.6cqw; transform:rotate(-4deg);">
+            <div class="big" style="font-size:9cqw; color:var(--err);">✗ DEU ERRADO</div>
+          </div>
+          <div class="cmd" style="margin-top:3.4cqw;">exit 1 · <span style="color:var(--fg)">22 min</span> · "parece um dinossauro de piscina"</div>
+        </div>
+      </div>
+    </div>
+    <div class="label"><b>04 · VEREDITO</b><span>veredito · 2,5 s</span></div>
+    <div class="note"><strong>O carimbo bate primeiro</strong> (escala de 1,4 pra 1 com tranco), a linha de saída aparece depois. Segura 1 s parado. Versão ✓ FUNCIONOU usa verde e "exit 0".</div>
+    <span class="chip">corte → corte</span>
+  </figure>
+
+  <!-- 05 PLACAR -->
+  <figure>
+    <div class="cell" id="frame-05">
+      <div class="term">
+        <div class="bar"><span class="dot on"></span><span class="dot"></span><span class="dot"></span>&nbsp; agente@canal: ~/resultado</div>
+        <div class="body">
+          <div class="cmd">&gt; placar --final</div>
+          <div style="margin-top:2.6cqw; font-size:3.4cqw; line-height:1.55;">
+            <div><span style="color:var(--acc)">✓</span> NÍVEL 1 &nbsp;<span style="color:var(--ui)">Pokébola</span> <span style="color:var(--ui); font-size:2.2cqw">· 6 min</span></div>
+            <div><span style="color:var(--err)">✗</span> NÍVEL 2 &nbsp;<span style="color:var(--ui)">Dragão</span> <span style="color:var(--ui); font-size:2.2cqw">· 22 min</span></div>
+            <div><span style="color:var(--acc)">✓</span> NÍVEL 3 &nbsp;<span style="color:var(--ui)">Vila jogável</span> <span style="color:var(--ui); font-size:2.2cqw">· 29 min</span></div>
+          </div>
+          <div class="big" style="font-size:4cqw; margin-top:2.6cqw;">QUAL IA EU TESTO AGORA?<span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="label"><b>05 · PLACAR FINAL</b><span>placar · 6 s</span></div>
+    <div class="note"><strong>As três linhas entram uma por vez,</strong> cada ✓/✗ batendo no fim da linha. A pergunta vem por último, digitada, e fica com o cursor piscando até o fim.</div>
+    <span class="chip">varredura → fim</span>
+  </figure>
+
+  <!-- 06 CORTE VERTICAL -->
+  <figure>
+    <div class="cell" id="frame-06" style="background:#050806;">
+      <div style="position:absolute; left:50%; top:2cqw; bottom:2cqw; aspect-ratio:9/16; transform:translateX(-50%); background:var(--bg); border:0.3cqw solid #1f3a24; container-type:inline-size;">
+        <div style="position:absolute; top:7cqw; left:6cqw; right:6cqw; font-size:4.2cqw; color:var(--ui);">● GPT 6 Astra</div>
+        <div class="big" style="position:absolute; top:14cqw; left:6cqw; right:6cqw; font-size:10cqw;">A IA FEZ UM <span style="color:var(--acc)">DRAGÃO</span>… ISSO AQUI</div>
+        <div class="media" style="position:absolute; top:52cqw; left:0; right:0; height:72cqw; font-size:4cqw;">RECORTE DA<br>GRAVAÇÃO</div>
+        <div style="position:absolute; top:132cqw; left:5cqw; right:5cqw; text-align:center; font-size:7.5cqw; font-weight:700;">braços de <span style="color:var(--acc)">macarrão</span> de piscina</div>
+      </div>
+    </div>
+    <div class="label"><b>06 · CORTE VERTICAL</b><span>corte-vertical · 15–60 s</span></div>
+    <div class="note"><strong>A legenda mexe primeiro</strong> (grande, palavra a palavra); o título fica fixo no topo o corte todo. Gravação recortada na área de interesse, não a tela inteira encolhida. Embaixo sobra espaço livre pros botões do TikTok/Reels.</div>
+    <span class="chip">corte → corte</span>
+  </figure>
+
+  <!-- MAPA DE TRANSIÇÕES -->
+  <figure>
+    <div class="tokens">
+      <b>Mapa de transições</b><br>
+      01 Abertura ─varredura→ 02 Nível 1 ─corte→ 03 Agente ─corte→ 04 Veredito<br>
+      ─varredura→ 02 Nível 2 → 03 → 04 ─varredura→ 02 Nível 3 → 03 → 04<br>
+      ─varredura→ 05 Placar.<br>
+      Uma regra só: a varredura sempre desce (de cima pra baixo), como um terminal limpando a tela.
+    </div>
+  </figure>
+
+  <!-- TOKENS -->
+  <figure>
+    <div class="tokens">
+      <b>Cores</b><br>
+      <span class="sw" style="background:#0A0F0B"></span>#0A0F0B fundo<br>
+      <span class="sw" style="background:#D8F3DC"></span>#D8F3DC texto<br>
+      <span class="sw" style="background:#39FF14"></span>#39FF14 destaque<br>
+      <span class="sw" style="background:#FF3B3B"></span>#FF3B3B só no "deu errado"<br>
+      <span class="sw" style="background:#5C6B60"></span>#5C6B60 interface<br>
+      <b>Fontes</b> JetBrains Mono (terminal, legenda) · Archivo Black (impacto)<br>
+      <b>Proibido</b> gradiente de tela cheia, emoji na tela, interface falsa da IA, slideshow de cards
+    </div>
+  </figure>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html
+  data-composition-variables='[
+    {"id":"numero","type":"number","label":"Número do nível","default":2,"min":1,"max":9,"step":1},
+    {"id":"desafio","type":"string","label":"Nome do desafio","default":"O DRAGÃO"},
+    {"id":"dificuldade","type":"number","label":"Dificuldade (1-5)","default":3,"min":1,"max":5,"step":1}
+  ]'
+>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; background: #0A0F0B; overflow: hidden; font-family: "JetBrains Mono", monospace; color: #D8F3DC; }
+        #cn-ghost { position: absolute; left: 860px; top: -200px; font-family: "Archivo Black", sans-serif; font-size: 900px; line-height: 1; color: #39FF14; opacity: 0.08; }
+        #cn-term { position: absolute; left: 80px; top: 80px; right: 80px; bottom: 80px; border: 4px solid #1F3A24; background: rgba(17,26,19,0.92); }
+        #cn-bar { height: 64px; border-bottom: 3px solid #1F3A24; display: flex; align-items: center; gap: 14px; padding: 0 26px; font-size: 26px; color: #8FA394; }
+        .cn-dot { width: 18px; height: 18px; border-radius: 50%; background: #1F3A24; }
+        #cn-dot1 { background: #39FF14; }
+        #cn-body { position: absolute; left: 70px; right: 70px; top: 150px; }
+        #cn-cmd { font-size: 40px; color: #8FA394; }
+        #cn-num { margin-top: 26px; font-family: "Archivo Black", sans-serif; font-size: 210px; line-height: 1; color: #39FF14; }
+        #cn-name { margin-top: 18px; font-family: "Archivo Black", sans-serif; font-size: 104px; line-height: 1; }
+        #cn-diff { margin-top: 64px; font-size: 36px; color: #8FA394; display: flex; align-items: center; gap: 16px; }
+        .cn-sq { width: 34px; height: 34px; border: 3px solid #39FF14; }
+        .cn-sq-fill { position: absolute; inset: 0; background: #39FF14; }
+        .cn-sq { position: relative; }
+        #cn-scan { position: absolute; left: 0; right: 0; top: 0; height: 6px; background: #39FF14; box-shadow: 0 0 24px rgba(57,255,20,0.6); }
+      </style>
+
+      <div id="root" data-composition-id="cartela-nivel" data-width="1920" data-height="1080">
+        <div id="cn-term">
+          <div id="cn-bar"><span class="cn-dot" id="cn-dot1"></span><span class="cn-dot"></span><span class="cn-dot"></span><span id="cn-path"></span></div>
+          <div id="cn-body">
+            <div id="cn-cmd">&gt; carregar desafio</div>
+            <div id="cn-num"></div>
+            <div id="cn-name"></div>
+            <div id="cn-diff"><span>dificuldade</span><span id="cn-squares" style="display:flex;gap:10px"></span><span id="cn-diff-n"></span></div>
+          </div>
+        </div>
+        <div id="cn-ghost" data-layout-allow-overflow data-layout-allow-occlusion></div>
+        <div id="cn-scan" data-layout-allow-overflow></div>
+      </div>
+
+      <script>
+        (function () {
+          const v = window.__hyperframes.getVariables();
+          const n = Math.round(v.numero);
+          const d = Math.max(1, Math.min(5, Math.round(v.dificuldade)));
+          document.getElementById("cn-ghost").textContent = n;
+          document.getElementById("cn-path").textContent = "agente@canal: ~/nivel-" + n;
+          document.getElementById("cn-num").textContent = "NÍVEL " + n;
+          document.getElementById("cn-name").textContent = v.desafio;
+          document.getElementById("cn-diff-n").textContent = d + "/5";
+          const sq = document.getElementById("cn-squares");
+          for (let i = 0; i < 5; i++) {
+            const s = document.createElement("span");
+            s.className = "cn-sq";
+            if (i < d) { const f = document.createElement("span"); f.className = "cn-sq-fill"; f.id = "cn-fill-" + i; s.appendChild(f); }
+            sq.appendChild(s);
+          }
+
+          const tl = gsap.timeline({ paused: true });
+          // varredura: linha desce e revela o terminal
+          tl.fromTo("#cn-scan", { y: -10 }, { y: 1090, duration: 0.45, ease: "power2.in" }, 0);
+          tl.fromTo("#cn-term", { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.45, ease: "power2.in" }, 0);
+          tl.fromTo("#cn-ghost", { y: 30, opacity: 0 }, { y: -20, opacity: 0.06, duration: 3, ease: "sine.out" }, 0.2);
+          tl.fromTo("#cn-num", { scale: 1.35, opacity: 0, transformOrigin: "0% 60%" }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.2)" }, 0.45);
+          tl.fromTo("#cn-name", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "expo.out" }, 0.75);
+          tl.fromTo("#cn-diff", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 1.1);
+          for (let i = 0; i < d; i++) {
+            tl.fromTo("#cn-fill-" + i, { scale: 0 }, { scale: 1, duration: 0.18, ease: "back.out(3)" }, 1.25 + i * 0.12);
+          }
+          window.__timelines["cartela-nivel"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

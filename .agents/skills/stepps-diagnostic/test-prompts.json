@@ -1,0 +1,87 @@
+{
+  "skill": "stepps-diagnostic",
+  "version": "0.1.0",
+  "source_book": "《疯传——让你的产品、思想、行为像病毒一样入侵》 乔纳·伯杰",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们团队下周要上线一个新品发布活动，预算很有限，老板希望活动能自己传播起来。你帮我看看这个活动方案有没有传播力？",
+      "expected_behavior": "应激活 stepps-diagnostic, 并用STEPPS六维框架逐一诊断该活动方案的传播潜力, 找到最弱维度并给出补强建议",
+      "notes": "正面场景: 用户明确要求评估活动的传播潜力, 典型的'这个方案能不能火'触发信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我最近做了三篇公众号文章，质量我觉得挺高的，但就是没人分享，阅读量全靠我自己朋友圈硬推。到底哪里出了问题？",
+      "expected_behavior": "应激活 stepps-diagnostic, 并用六维框架识别这三篇文章传播属性的短板, 定位最弱维度",
+      "notes": "正面场景: 用户说'没人分享我的内容', 直击SKILL.md中'为什么我的内容没人分享'触发信号"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "竞品A上个月做了个活动突然就火了，我们的产品和活动明明不比他们差，为什么他们能爆我们不能？你帮我分析分析差距在哪。",
+      "expected_behavior": "应激活 stepps-diagnostic, 并用STEPPS六维对比用户与竞品的传播属性差异, 找出竞品在哪些维度做得更好",
+      "notes": "正面场景: 竞品分析场景, '为什么竞品火了而我没有', SKILL.md明确列出此触发场景"
+    },
+    {
+      "id": "should-trigger-04",
+      "type": "should_trigger",
+      "prompt": "我正在给客户做一份传播策略方案，需要一套系统的方法论来指导创意方向，不能拍脑袋。有没有什么框架可以用？",
+      "expected_behavior": "应激活 stepps-diagnostic, 并将STEPPS作为结构化检查清单介绍给用户, 引导用户逐项填充",
+      "notes": "正面场景: 用户需要结构化清单指导传播策略设计, SKILL.md场景4明确覆盖"
+    },
+    {
+      "id": "should-trigger-05",
+      "type": "should_trigger",
+      "prompt": "帮我想想这个营销方案为什么有效，我需要给老板一个结构化的解释，不能只说'感觉挺好的'。",
+      "expected_behavior": "应激活 stepps-diagnostic, 并用STEPPS六维提供结构化分析语言, 帮助用户向老板解释传播方案的有效性",
+      "notes": "正面场景: 用户要向团队解释传播方案为什么有效, SKILL.md场景5明确覆盖"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "STEPPS是什么？给我简单解释一下这六个原则分别是什么意思。",
+      "expected_behavior": "不应激活本 skill, 因为用户只是在做知识查询, 不是在设计或诊断传播场景。应直接回答STEPPS概念即可",
+      "notes": "诱饵: 信息查询型。用户提到了STEPPS关键词, 但只是想了解概念定义, 没有实际应用需求"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我最近在抖音投了5万块钱广告，点击率还行但转化特别差，帮我看看是不是出价策略有问题，要不要调整定向人群。",
+      "expected_behavior": "不应激活本 skill, 因为用户的问题本质是广告投放优化（ROI计算、媒介购买、竞价定向）, 不是传播属性诊断。SKILL.md边界明确排除'纯广告投放策略'",
+      "notes": "诱饵: 广告投放优化。用户提到营销、转化率等关键词, 但核心问题是出价和定向, 属于广告技术问题"
+    },
+    {
+      "id": "should-not-trigger-03",
+      "type": "should_not_trigger",
+      "prompt": "帮我想一个品牌定位, 我们是一个新出的燕麦奶品牌, 想要切入25-35岁都市白领女性市场, 目标是做中高端定位。",
+      "expected_behavior": "不应激活本 skill, 因为用户在做品牌定位和市场细分, 这是战略层问题。SKILL.md边界明确排除'品牌定位或市场细分'",
+      "notes": "诱饵: 品牌战略。用户提到品牌、市场, 但核心需求是定位和细分, 不是传播力诊断"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们的短视频内容播放量挺好的，但就是没人转发，我觉得可能是标题不够吸引人。你帮我看看是标题的问题还是别的什么原因？",
+      "expected_behavior": "边界判断: 应激活 stepps-diagnostic 进行六维诊断, 但用户也可能需要文案技巧建议。诊断后如果发现传播属性齐全但标题确实有问题, 可以建议同时优化标题; 如果发现传播属性本身有短板, 应优先补强短板",
+      "notes": "边界: 用户提到'标题不够吸引'偏向内容创作技巧（SKILL边界排除项）, 但'没人转发'直击传播力诊断核心需求。需要先做诊断再决定是否涉及创作层面"
+    },
+    {
+      "id": "edge-02",
+      "type": "edge_case",
+      "prompt": "我想让我们的新APP在上线第一个月就能实现用户自然增长, 现在产品还在开发中, 你说我们在设计阶段需要考虑什么？",
+      "expected_behavior": "边界判断: 可以激活 stepps-diagnostic, 在产品未上线时用STEPPS框架指导传播属性的预设计。虽然产品还没发布, 但提前规划传播力设计是合理的",
+      "notes": "边界: 产品尚未发布, 没有传播数据可诊断。但用户在设计阶段就考虑传播力是前瞻性需求, STEPPS可以作为设计检查清单使用。与wom-diagnosis不同, 那个需要已有口碑数据"
+    },
+    {
+      "id": "edge-03",
+      "type": "edge_case",
+      "prompt": "你能不能帮我用STEPPS框架分析一下瑞幸咖啡为什么会火？我就是想学习一下这个框架怎么用。",
+      "expected_behavior": "边界判断: 可以激活 stepps-diagnostic, 用瑞幸咖啡作为案例做六维诊断演示。虽然用户说'想学习框架', 但具体分析一个真实案例本身就是诊断练习, 能帮助用户理解框架用法",
+      "notes": "边界: 用户表面上是在学习框架（信息查询）, 但要求具体分析一个案例（诊断实践）。介于纯知识查询和实际诊断之间, 激活后用真实案例做示范是合理的使用方式"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。"
+}

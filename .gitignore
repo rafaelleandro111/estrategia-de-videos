@@ -1,0 +1,61 @@
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+
+# Claude Code (sessões locais, não devem ir pro repo)
+.claude/projects/
+.claude/sessions/
+.claude/shell-snapshots/
+.claude/telemetry/
+.claude/file-history/
+.claude/backups/
+
+# Dependências
+node_modules/
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# Segredos (chaves de API, logins) — nunca vão pro GitHub
+.env
+.env.*
+**/.env
+credentials.json
+**/credentials.json
+client_secret*.json
+token*.json
+config.toml
+
+# Ferramentas de terceiros (cada uma tem o próprio repositório; aqui ficam chaves e ambientes)
+ferramentas/
+
+# Ambientes Python
+venv/
+.venv/
+__pycache__/
+
+# Mídia pesada (vídeo, áudio, fontes baixadas, renders)
+*.mp4
+*.mov
+*.webm
+*.mkv
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.flac
+*.ogg
+fontes/
+build/
+.hyperframes/
+snap/
+snap2/
+
+# Drop zone do usuário (só o README vai versionado)
+dados/*
+!dados/README.md

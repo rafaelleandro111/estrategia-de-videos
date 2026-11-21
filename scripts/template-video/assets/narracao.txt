@@ -1,0 +1,4 @@
+Será que uma inteligência artificial consegue criar um jogo 3D sozinha? Hoje eu vou testar em três níveis.
+Nível um: a pokébola.
+Eu mandei um prompt simples pro agente e deixei ele trabalhar. Ele abriu o Blender sozinho, montou a esfera, separou as cores e ainda colocou iluminação. Tudo isso em seis minutos.
+Funcionou.
